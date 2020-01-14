@@ -7,6 +7,6 @@ entries:
     digest: 528cbefc776daa4115ac007ad69ccb8777f22e6ffbd15cbc69a45cd7766b161f
     name: myapp
     urls:
-    - https://eu-de.git.cloud.ibm.com/bnpp-frb-toolchain/helm-charts/myapp-1.0.0.tgz
+    - https://eu-de.git.cloud.ibm.com/bnpp-frb-toolchain/helm-charts/spring/myapp-1.0.0.tgz
     version: 1.0.0
 generated: "2020-01-14T13:28:16.161372234Z"
