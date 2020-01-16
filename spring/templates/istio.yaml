@@ -1,0 +1,29 @@
+{{ if .Values.istio.enabled }}
+apiVersion: config.istio.io/v1alpha2
+kind: RouteRule
+metadata:
+  name: {{ .Values.name }}
+  namespace: {{ .Release.Namespace | quote }}
+  labels:
+    app: {{ .Values.name }}
+    chart: '{{ .Chart.Name }}-{{ .Chart.Version | replace "+" "_" }}'
+    release: {{ .Release.Name }}
+    heritage: {{ .Release.Service }}
+    codeAP: {{ .Values.codeAP }}
+    tier: {{ .Values.tier }}
+    component: JAVA
+    function: {{ .Values.function }}  
+spec:
+  destination:
+    name: "{{ .Values.name }}"
+  precedence: 1
+  route:
+  - labels:
+      version: "current"
+    weight: {{ .Values.istio.current.weight }}
+{{ if .Values.base.enabled }}
+  - labels:
+      version: "cannary"
+    weight: {{ .Values.istio.cannary.weight }}
+{{ end }}
+{{ end }}

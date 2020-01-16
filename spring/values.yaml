@@ -1,0 +1,165 @@
+## This is a YAML-formatted file.
+## Declare variables to be passed into your templates.
+
+## Application description
+## Replace all {{name}} by the value of name
+name: app
+codeAP: ""
+tier: ""
+function: ""
+
+## Defaut pod replicas
+replicaCount: 1
+
+## Horizontal Pod Autoscaler
+hpa:
+  enabled: false
+  maxReplicas: 3
+  metrics:
+    cpu:
+      targetAverageUtilization: 70
+    memory:
+      targetAverageUtilization: 70
+  minReplicas: 1
+
+podAnnotations:
+  ## Specify application service uptime
+  downscaler/uptime: Mon-Fri 07:30-20:00 CET
+
+image:
+  repository: de.icr.io
+  tag: 0.0.1
+  pullPolicy: IfNotPresent
+
+## uncomment and modify the following livenessProbe and readinessProbe.
+## These defaults should work with anything that uses the spring health actuator.
+## If you do want to specify Probe, uncomment the following
+## lines, adjust them as necessary, and remove the curly braces after '*Probe:'.
+livenessProbe: {}
+#  httpGet:
+#    path: /actuator/health
+#    port: http
+#  initialDelaySeconds: 60
+#  periodSeconds: 10
+readinessProbe: {}
+#  httpGet:
+#    path: /actuator/health
+#    port: http
+#  initialDelaySeconds: 60
+#  periodSeconds: 10
+
+## Specify java command line options
+javaopts: "-Dspring.profiles.active=cloud-dev -Dspring.config.additional-location=/applis/config/external-config.yml"
+
+## Secret name for password
+secretRef:
+  enabled: true
+
+## Uncomment to mount a pvc on /applis/shared
+pvc:
+  enabled: false
+  storageClassName: ibmc-s3fs-standard-perf-regional
+
+spring:
+  ## Uncomment if you want to activate a specfic spring profile
+  # profile: kubernetes
+  ## customized parameters/config for your spring app.
+  config:
+    ## Currently only supports file in /applis/config. Uncomment if you want to activate
+    ## Contents of config in YAML. Uncomment if you want to activate
+    contents:
+      #   db:
+      #     datasource:
+      #       url: jdbc:postgresql://host:port/ibmclouddb?sslmode=prefer
+      #       username: user
+      #       password: ${DB_PASSWORD}
+      #       driverClassName: org.postgresql.Driver
+      #       maximumPoolSize : 30
+    ## Enable an optional secret name {{name}}-security that contains client certificate file to be loaded in /applis/security/key.p12 /applis/security/trust.p12
+    clientCerts:
+      enabled: false
+
+## The list of ports that your app listens on
+containerPort: 8080
+
+extraEnv:
+  ## Extra environment variables to be injected. If you do want to specify extraEnv, uncomment the following
+  ## lines, adjust them as necessary, and remove the curly braces after 'extraEnv:'.
+  DATABASE_ENGINE: mysql
+  DATABASE_HOST: mysql
+  # DATABASE_NAME: spring
+  # DATABASE_USERNAME: spring
+  # DATABASE_PASSWORD: spring
+
+securityContext:
+  runAsUser: 1000
+
+
+#  fsGroup: 1000
+
+resources: {}
+  ## We usually recommend not to specify default resources and to leave this as a conscious
+  ## choice for the user. This also increases chances charts run on environments with little
+  ## resources, such as Minikube. If you do want to specify resources, uncomment the following
+  ## lines, adjust them as necessary, and remove the curly braces after 'resources:'.
+  # limits:
+  #  cpu: 100m
+  #  memory: 128Mi
+  # requests:
+  #  cpu: 100m
+  #  memory: 128Mi
+
+nodeSelector: {}
+
+tolerations: {}
+
+affinity: {}
+
+service:
+  ## If true, Service will be created.
+  ##
+  enabled: true
+  httpPort: 80
+  httpsPort: 443
+   ## Service type can be set to ClusterIP or LoadBalancer.
+  ##
+  type: ClusterIP
+
+ingress:
+  ## If true, Ingress will be created.
+  ##
+  enabled: true
+
+  ## Ingress annotations
+  ##
+  annotations:
+    ingress.bluemix.net/redirect-to-https: "True"
+  #   ingress.bluemix.net/ssl-services: ssl-service="{{name}}"
+
+  ## hostnames must be provided if Ingress is enabled
+  ##
+  # hosts:
+  #   - "{{name}}.cluster-dnsname"
+
+  ## Ingress TLS configuration secrets
+  ## Must be manually created in the namespace
+  ##
+  # tls:
+  #   - secretName: cluster-dnsname
+  #     hosts:
+  #       - "{{name}}.cluster-dnsname"
+
+podDisruptionBudget:
+  ## If true, podDisruptionBudget will be created.
+  ##
+  enabled: false
+  minAvailable: 1
+
+istio:
+  ## If true, istio config will be created.
+  ##
+  enabled: false
+  current:
+    weight: 100
+  cannary:
+    weight: 0

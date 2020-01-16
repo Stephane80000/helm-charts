@@ -1,0 +1,19 @@
+{{- if and .Values.pvc.enabled -}}
+kind: PersistentVolumeClaim
+apiVersion: v1
+metadata:
+  name: {{ .Values.name }}
+  namespace: {{ .Release.Namespace | quote }}
+  annotations:
+    ibm.io/auto-create-bucket: "true"
+    ibm.io/auto-delete-bucket: "false"
+    ibm.io/bucket: "{{ .Values.name }}""
+    ibm.io/secret-name: "cos-write-access"
+spec:
+  accessModes:
+    - ReadWriteMany
+  resources:
+    requests:
+      storage: 8Gi # Enter a fictitious value
+  storageClassName: {{ .Values.pvc.storageClassName }}
+{{- end }}

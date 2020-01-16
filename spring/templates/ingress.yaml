@@ -1,0 +1,44 @@
+{{- if .Values.ingress.enabled -}}
+{{- $httpPort := .Values.service.httpPort }}
+apiVersion: extensions/v1beta1
+kind: Ingress
+metadata:
+  annotations:
+  {{- range $key, $value := .Values.ingress.annotations }}
+    {{ $key }}: {{ $value | quote }}
+  {{- end }}
+  labels:
+    app: {{ .Values.name }}
+    chart: '{{ .Chart.Name }}-{{ .Chart.Version | replace "+" "_" }}'
+    release: {{ .Release.Name }}
+    heritage: {{ .Release.Service }}
+    codeAP: {{ .Values.codeAP }}
+    tier: {{ .Values.tier }}
+    component: JAVA
+    function: {{ .Values.function }}
+  name: {{ .Values.name }}
+  namespace: {{ .Release.Namespace | quote }}
+spec:
+  rules:
+  {{- range .Values.ingress.hosts }}
+    - host: {{ . }}
+      http:
+        paths:
+        {{- if index $.Values.ingress "annotations" }}
+          {{- if eq (index $.Values.ingress.annotations "kubernetes.io/ingress.class" | default "") "gce" "alb" }}
+          - path: /*
+          {{- else }}{{/* Has annotations but ingress class is not "gce" nor "alb" */}}
+          - path: /
+          {{- end }}
+        {{- else}}{{/* Has no annotations */}}
+          - path: /
+        {{- end }}
+            backend:
+              serviceName: {{ .Values.name }}
+              servicePort: {{ .Values.service.httpPort }}
+  {{- end -}}
+  {{- if .Values.ingress.tls }}
+  tls:
+{{ toYaml .Values.ingress.tls | indent 4 }}
+  {{- end -}}
+{{- end -}}

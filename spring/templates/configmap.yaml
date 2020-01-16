@@ -1,0 +1,19 @@
+{{- if hasKey .Values.spring.config "content" }}
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: config
+  namespace: {{ .Release.Namespace | quote }}
+  labels:
+    app: {{ .Values.name }}
+    chart: '{{ .Chart.Name }}-{{ .Chart.Version | replace "+" "_" }}'
+    release: {{ .Release.Name }}
+    heritage: {{ .Release.Service }}
+    codeAP: {{ .Values.codeAP }}
+    tier: {{ .Values.tier }}
+    component: JAVA
+    function: {{ .Values.function }}
+data:
+  application.yml:
+    {{ toYaml .Values.Spring.config.content | indent 4  }}
+{{- end }}
