@@ -62,8 +62,6 @@ pvc:
   storageClassName: ibmc-s3fs-standard-perf-regional
 
 spring:
-  ## Uncomment if you want to activate a specfic spring profile
-  # profile: kubernetes
   ## customized parameters/config for your spring app.
   config:
     ## Currently only supports file in /applis/config. Uncomment if you want to activate

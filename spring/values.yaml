@@ -20,7 +20,7 @@ hpa:
     cpu:
       targetAverageUtilization: 70
     memory:
-      targetAverageUtilization: 70
+      targetAverageUtilization: 90
   minReplicas: 1
 
 podAnnotations:
@@ -54,16 +54,14 @@ javaopts: "-Dspring.profiles.active=cloud-dev -Dspring.config.additional-locatio
 
 ## Secret name for password
 secretRef:
-  enabled: true
+  enabled: false
 
 ## Uncomment to mount a pvc on /applis/shared
 pvc:
   enabled: false
-  storageClassName: ibmc-s3fs-standard-perf-regional
+  storageClassName: ibmc-s3fs-standard-standard-regional
 
 spring:
-  ## Uncomment if you want to activate a specfic spring profile
-  # profile: kubernetes
   ## customized parameters/config for your spring app.
   config:
     ## Currently only supports file in /applis/config. Uncomment if you want to activate
@@ -83,7 +81,7 @@ spring:
 ## The list of ports that your app listens on
 containerPort: 8080
 
-extraEnv:
+extraEnv: {}
   ## Extra environment variables to be injected. If you do want to specify extraEnv, uncomment the following
   ## lines, adjust them as necessary, and remove the curly braces after 'extraEnv:'.
   # DATABASE_ENGINE: mysql
@@ -110,7 +108,7 @@ resources: {}
 
 nodeSelector: {}
 
-tolerations: {}
+tolerations: []
 
 affinity: {}
 
@@ -160,5 +158,5 @@ istio:
   enabled: false
   current:
     weight: 100
-  cannary:
+  canary:
     weight: 0
