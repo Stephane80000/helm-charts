@@ -1,7 +1,7 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: {{ .Release.Name }}
+  name: "{{ .Release.Name }}-{{ .Values.version }}"
   namespace: {{ .Release.Namespace | quote }}
   labels:
     app: {{ .Release.Name }}
@@ -36,7 +36,7 @@ spec:
       securityContext:
 {{ toYaml .Values.securityContext | indent 8 }}
       containers:
-        - name: {{ .Chart.Name }}
+        - name: "{{ .Release.Name }}-{{ .Values.version }}"
           image: "{{ .Values.image.repository }}:{{ .Values.image.tag }}"
           imagePullPolicy: {{ .Values.image.pullPolicy | quote }}
           env:
@@ -99,7 +99,7 @@ spec:
       {{- if hasKey .Values.spring.config "contents" }}
         - name: config
           configMap:
-            name: config
+            name: "config-{{ .Values.version }}"
       {{- end }}
       {{- if .Values.spring.config.clientCerts.enabled }}
         - name: "{{ .Release.Name }}-security"

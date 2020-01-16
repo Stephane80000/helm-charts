@@ -23,7 +23,7 @@ spec:
     weight: {{ .Values.istio.current.weight }}
 {{ if .Values.base.enabled }}
   - labels:
-      version: "cannary"
+      version: "canary"
     weight: {{ .Values.istio.cannary.weight }}
 {{ end }}
 {{ end }}

@@ -6,6 +6,8 @@
 codeAP: ""
 tier: ""
 function: ""
+## Version current or canary
+version: "current"
 
 ## Defaut pod replicas
 replicaCount: 1
@@ -158,5 +160,5 @@ istio:
   enabled: false
   current:
     weight: 100
-  cannary:
+  canary:
     weight: 0
