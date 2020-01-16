@@ -20,7 +20,7 @@ $ helm repo update
 To install the chart with the release name `myapp` and a YAML file that specifies the values for the parameters `values-xxx.yaml` in the namespace `mynamespace` :
 
 ```bash
-$ helm install myapp spring -n mynamespace -f values-xxx.yaml
+$ helm install myapp stephane80000/spring --version X.X.X -n mynamespace -f values-xxx.yaml
 ```
 
 ## Uninstalling the Chart
