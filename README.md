@@ -41,7 +41,7 @@ The following table lists the configurable parameters and their default values.
 Alternatively, you can sepcify each parameter using the `--set key=value[,key=value]` argument to `helm install`.
 
 
-> **Tip**: You can donwload the sample [values.yaml](values.yaml)
+> **Tip**: You can donwload the sample [spring/values.yaml](values.yaml)
 
 | Parameter | Description | Default |
 |-----------|-------------|---------|
