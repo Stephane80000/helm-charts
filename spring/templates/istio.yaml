@@ -2,10 +2,10 @@
 apiVersion: config.istio.io/v1alpha2
 kind: RouteRule
 metadata:
-  name: {{ .Values.name }}
+  name: {{ .Release.Name }}
   namespace: {{ .Release.Namespace | quote }}
   labels:
-    app: {{ .Values.name }}
+    app: {{ .Release.Name }}
     chart: '{{ .Chart.Name }}-{{ .Chart.Version | replace "+" "_" }}'
     release: {{ .Release.Name }}
     heritage: {{ .Release.Service }}
@@ -15,7 +15,7 @@ metadata:
     function: {{ .Values.function }}  
 spec:
   destination:
-    name: "{{ .Values.name }}"
+    name: "{{ .Release.Name }}"
   precedence: 1
   route:
   - labels:

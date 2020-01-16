@@ -1,10 +1,10 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: {{ .Values.name }}
+  name: {{ .Release.Name }}
   namespace: {{ .Release.Namespace | quote }}
   labels:
-    app: {{ .Values.name }}
+    app: {{ .Release.Name }}
     chart: '{{ .Chart.Name }}-{{ .Chart.Version | replace "+" "_" }}'
     release: {{ .Release.Name }}
     heritage: {{ .Release.Service }}
@@ -16,12 +16,12 @@ spec:
   replicas: {{ .Values.replicaCount }}
   selector:
     matchLabels:
-      app: {{ .Values.name }}
+      app: {{ .Release.Name }}
       release: {{ .Release.Name }}
   template:
     metadata:
       labels:
-        app: {{ .Values.name }}
+        app: {{ .Release.Name }}
         chart: '{{ .Chart.Name }}-{{ .Chart.Version | replace "+" "_" }}'
         release: {{ .Release.Name }}
         heritage: {{ .Release.Service }}
@@ -31,10 +31,10 @@ spec:
         function: {{ .Values.function }}
         version: {{ .Values.version }}
       annotations:
-        {{ toYaml .Values.podAnnotations | indent 8 }}
+{{ toYaml .Values.podAnnotations | indent 8 }}
     spec:
       securityContext:
-        {{ toYaml .Values.securityContext | indent 8 }}
+{{ toYaml .Values.securityContext | indent 8 }}
       containers:
         - name: {{ .Chart.Name }}
           image: "{{ .Values.image.repository }}:{{ .Values.image.tag }}"
@@ -42,55 +42,59 @@ spec:
           env:
             - name: JAVA_OPTS
               value: {{ .Values.javaopts | quote }}
-          {{ if and .Values.secretRef.enabled }}
+            {{- range $key, $value := .Values.extraEnv }}
+            - name: {{ $key }}
+              value: {{ $value | quote }}
+            {{- end }}
+          {{- if .Values.secretRef.enabled }}
           envFrom:
             - secretRef:
-                name: "{{ .Values.name }}-secret"
-          {{ end }}
+                name: "{{ .Release.Name }}-secret"
+          {{- end }}
           volumeMounts:
-            {{ if and .Values.pvc.enabled }}
-            - name: {{ .Values.name }}
+            {{- if .Values.pvc.enabled }}
+            - name: {{ .Release.Name }}
               mountPath: "/applis/shared"
-            {{ end }}
-            {{ if hasKey .Values.spring.config "contents" }}
+            {{- end -}}
+            {{- if hasKey .Values.spring.config "contents" }}
             - name: config
               mountPath: /applis/config
-            {{ end }}
-            {{ if and .Values.spring.config.clientCerts.enabled }}
-            - name: "{{ .Values.name }}-security"
+            {{- end -}}
+            {{ if .Values.spring.config.clientCerts.enabled }}
+            - name: "{{ .Release.Name }}-security"
               mountPath: /applis/security
-            {{ end }}
+            {{- end }}
           ports:
             - name: http
               containerPort: {{ .Values.containerPort }}
               protocol: TCP
           {{- if .Values.livenessProbe }}
           livenessProbe:
-          {{ toYaml .Values.livenessProbe | indent 12 }}
+{{ toYaml .Values.livenessProbe | indent 12 }}
           {{- end }}
           {{- if .Values.readinessProbe }}
           readinessProbe:
-          {{ toYaml .Values.readinessProbe | indent 12 }}
+{{ toYaml .Values.readinessProbe | indent 12 }}
           {{- end }}
           resources:
-          {{ toYaml .Values.resources | indent 12 }}
+{{ toYaml .Values.resources | indent 12 }}
       {{- with .Values.nodeSelector }}
       nodeSelector:
-        {{ toYaml . | indent 8 }}
+{{ toYaml . | indent 8 }}
       {{- end }}
       {{- with .Values.affinity }}
       affinity:
-        {{ toYaml . | indent 8 }}
+{{ toYaml . | indent 8 }}
       {{- end }}
       {{- with .Values.tolerations }}
       tolerations:
-        {{ toYaml . | indent 8 }}
+{{ toYaml . | indent 8 }}
       {{- end }}
       volumes:
       {{- if .Values.pvc.enabled }}
-        - name: {{ .Values.name }}
+        - name: {{ .Release.Name }}
           persistentVolumeClaim:
-            claimName: {{ .Values.name }}
+            claimName: {{ .Release.Name }}
       {{- end }}
       {{- if hasKey .Values.spring.config "contents" }}
         - name: config
@@ -98,7 +102,7 @@ spec:
             name: config
       {{- end }}
       {{- if .Values.spring.config.clientCerts.enabled }}
-        - name: "{{ .Values.name }}-security"
+        - name: "{{ .Release.Name }}-security"
           secret:
-            secretName: "{{ .Values.name }}-security"
+            secretName: "{{ .Release.Name }}-security"
       {{- end }}

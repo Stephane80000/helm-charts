@@ -2,7 +2,7 @@
 ## Declare variables to be passed into your templates.
 
 ## Application description
-## Replace all {{name}} by the value of name
+## Replace all app by the value of name
 codeAP: ""
 tier: ""
 function: ""
@@ -56,7 +56,7 @@ secretRef:
 
 ## Uncomment to mount a pvc on /applis/shared
 pvc:
-  enabled: false
+  enabled: true
   storageClassName: ibmc-s3fs-standard-perf-regional
 
 spring:
@@ -67,16 +67,16 @@ spring:
     ## Currently only supports file in /applis/config. Uncomment if you want to activate
     ## Contents of config in YAML. Uncomment if you want to activate
     content:
-      #   db:
-      #     datasource:
-      #       url: jdbc:postgresql://host:port/ibmclouddb?sslmode=prefer
-      #       username: user
-      #       password: ${DB_PASSWORD}
-      #       driverClassName: org.postgresql.Driver
-      #       maximumPoolSize : 30
-    ## Enable an optional secret name {{name}}-security that contains client certificate file to be loaded in /applis/security/key.p12 /applis/security/trust.p12
+      db:
+        datasource:
+          url: "jdbc:postgresql://host:port/ibmclouddb?sslmode=prefer"
+          username: "user"
+          password: "${DB_PASSWORD}"
+          driverClassName: "org.postgresql.Driver"
+          maximumPoolSize : 30
+    ## Enable an optional secret name app-security that contains client certificate file to be loaded in /applis/security/key.p12 /applis/security/trust.p12
     clientCerts:
-      enabled: false
+      enabled: true
 
 ## The list of ports that your app listens on
 containerPort: 8080
@@ -84,8 +84,8 @@ containerPort: 8080
 extraEnv:
   ## Extra environment variables to be injected. If you do want to specify extraEnv, uncomment the following
   ## lines, adjust them as necessary, and remove the curly braces after 'extraEnv:'.
-  # DATABASE_ENGINE: mysql
-  # DATABASE_HOST: mysql
+  DATABASE_ENGINE: mysql
+  DATABASE_HOST: mysql
   # DATABASE_NAME: spring
   # DATABASE_USERNAME: spring
   # DATABASE_PASSWORD: spring
@@ -94,17 +94,17 @@ securityContext:
   runAsUser: 1000
   fsGroup: 1000
 
-resources: {}
+resources:
   ## We usually recommend not to specify default resources and to leave this as a conscious
   ## choice for the user. This also increases chances charts run on environments with little
   ## resources, such as Minikube. If you do want to specify resources, uncomment the following
   ## lines, adjust them as necessary, and remove the curly braces after 'resources:'.
-  # limits:
-  #  cpu: 100m
-  #  memory: 128Mi
-  # requests:
-  #  cpu: 100m
-  #  memory: 128Mi
+  limits:
+    cpu: 100m
+    memory: 128Mi
+  requests:
+    cpu: 100m
+    memory: 128Mi
 
 nodeSelector: {}
 
@@ -131,25 +131,25 @@ ingress:
   ##
   annotations:
     ingress.bluemix.net/redirect-to-https: "True"
-  #   ingress.bluemix.net/ssl-services: ssl-service="{{name}}"
+  #   ingress.bluemix.net/ssl-services: ssl-service="app"
 
   ## hostnames must be provided if Ingress is enabled
   ##
-  # hosts:
-  #   - "{{name}}.cluster-dnsname"
+  hosts:
+    - "app.cluster-dnsname"
 
   ## Ingress TLS configuration secrets
   ## Must be manually created in the namespace
   ##
-  # tls:
-  #   - secretName: cluster-dnsname
-  #     hosts:
-  #       - "{{name}}.cluster-dnsname"
+  tls:
+    - secretName: cluster-dnsname
+      hosts:
+        - "app.cluster-dnsname"
 
 podDisruptionBudget:
   ## If true, podDisruptionBudget will be created.
   ##
-  enabled: false
+  enabled: true
   minAvailable: 1
 
 istio:

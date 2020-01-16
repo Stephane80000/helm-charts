@@ -2,12 +2,12 @@
 kind: PersistentVolumeClaim
 apiVersion: v1
 metadata:
-  name: {{ .Values.name }}
+  name: {{ .Release.Name }}
   namespace: {{ .Release.Namespace | quote }}
   annotations:
     ibm.io/auto-create-bucket: "true"
     ibm.io/auto-delete-bucket: "false"
-    ibm.io/bucket: "{{ .Values.name }}""
+    ibm.io/bucket: "{{ .Release.Name }}"
     ibm.io/secret-name: "cos-write-access"
 spec:
   accessModes:

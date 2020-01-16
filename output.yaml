@@ -1,0 +1,210 @@
+---
+# Source: spring/templates/poddisruptionbudget.yaml
+apiVersion: policy/v1beta1
+kind: PodDisruptionBudget
+metadata:
+  name: myapp
+  namespace: "toto"
+  labels:
+    app: myapp
+    chart: 'spring-0.0.1'
+    release: myapp
+    heritage: Helm
+    codeAP: 
+    tier: 
+    component: JAVA
+    function:  
+spec:
+  selector:
+    matchLabels:
+      app: myapp
+      chart: 'spring-0.0.1'
+      release: myapp
+      heritage: Helm
+      codeAP: 
+      tier: 
+      component: JAVA
+      function: 
+  minAvailable: 1
+---
+# Source: spring/templates/configmap.yaml
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: config
+  namespace: "toto"
+  labels:
+    app: myapp
+    chart: 'spring-0.0.1'
+    release: myapp
+    heritage: Helm
+    codeAP: 
+    tier: 
+    component: JAVA
+    function: 
+data:
+  application.yml: |
+    db:
+      datasource:
+        driverClassName: org.postgresql.Driver
+        maximumPoolSize: 30
+        password: ${DB_PASSWORD}
+        url: jdbc:postgresql://host:port/ibmclouddb?sslmode=prefer
+        username: user
+---
+# Source: spring/templates/persistentvolumeclaim.yaml
+kind: PersistentVolumeClaim
+apiVersion: v1
+metadata:
+  name: myapp
+  namespace: "toto"
+  annotations:
+    ibm.io/auto-create-bucket: "true"
+    ibm.io/auto-delete-bucket: "false"
+    ibm.io/bucket: "myapp"
+    ibm.io/secret-name: "cos-write-access"
+spec:
+  accessModes:
+    - ReadWriteMany
+  resources:
+    requests:
+      storage: 8Gi # Enter a fictitious value
+  storageClassName: ibmc-s3fs-standard-perf-regional
+---
+# Source: spring/templates/service.yaml
+apiVersion: v1
+kind: Service
+metadata:
+  name: myapp
+  namespace: "toto"
+  labels:
+    app: myapp
+    chart: 'spring-0.0.1'
+    release: myapp
+    heritage: Helm
+    codeAP: 
+    tier: 
+    component: JAVA
+    function: 
+spec:
+  type: ClusterIP
+  ports:
+  - name: http
+    port: 80
+    protocol: TCP
+    targetPort: 8080
+  - name: https
+    port: 443
+    protocol: TCP
+    targetPort: https
+  selector:
+    app: myapp
+    release: "myapp"
+---
+# Source: spring/templates/deployment.yaml
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: myapp
+  namespace: "toto"
+  labels:
+    app: myapp
+    chart: 'spring-0.0.1'
+    release: myapp
+    heritage: Helm
+    codeAP: 
+    tier: 
+    component: JAVA
+    function:    
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: myapp
+      release: myapp
+  template:
+    metadata:
+      labels:
+        app: myapp
+        chart: 'spring-0.0.1'
+        release: myapp
+        heritage: Helm
+        codeAP: 
+        tier: 
+        component: JAVA
+        function: 
+        version: 
+      annotations:
+        downscaler/uptime: Mon-Fri 07:30-20:00 CET
+    spec:
+      securityContext:
+        fsGroup: 1000
+        runAsUser: 1000
+      containers:
+        - name: spring
+          image: "de.icr.io:0.0.1"
+          imagePullPolicy: "IfNotPresent"
+          env:
+            - name: JAVA_OPTS
+              value: "-Dspring.profiles.active=cloud-dev -Dspring.config.additional-location=/applis/config/external-config.yml"
+            - name: DATABASE_ENGINE
+              value: "mysql"
+            - name: DATABASE_HOST
+              value: "mysql"
+          envFrom:
+            - secretRef:
+                name: "myapp-secret"
+          volumeMounts:
+            - name: myapp
+              mountPath: "/applis/shared"
+            - name: "myapp-security"
+              mountPath: /applis/security
+          ports:
+            - name: http
+              containerPort: 8080
+              protocol: TCP
+          resources:
+            limits:
+              cpu: 100m
+              memory: 128Mi
+            requests:
+              cpu: 100m
+              memory: 128Mi
+      volumes:
+        - name: myapp
+          persistentVolumeClaim:
+            claimName: myapp
+        - name: "myapp-security"
+          secret:
+            secretName: "myapp-security"
+---
+# Source: spring/templates/ingress.yaml
+apiVersion: extensions/v1beta1
+kind: Ingress
+metadata:
+  annotations:
+    ingress.bluemix.net/redirect-to-https: "True"
+  labels:
+    app: myapp
+    chart: 'spring-0.0.1'
+    release: myapp
+    heritage: Helm
+    codeAP: 
+    tier: 
+    component: JAVA
+    function: 
+  name: myapp
+  namespace: "toto"
+spec:
+  rules:
+    - host: app.cluster-dnsname
+      http:
+        paths:
+          - path: /
+            backend:
+              serviceName: myapp
+              servicePort: 80
+  tls:
+    - hosts:
+      - app.cluster-dnsname
+      secretName: cluster-dnsname

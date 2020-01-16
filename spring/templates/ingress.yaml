@@ -1,5 +1,6 @@
 {{- if .Values.ingress.enabled -}}
 {{- $httpPort := .Values.service.httpPort }}
+{{- $name := .Release.Name }}
 apiVersion: extensions/v1beta1
 kind: Ingress
 metadata:
@@ -8,7 +9,7 @@ metadata:
     {{ $key }}: {{ $value | quote }}
   {{- end }}
   labels:
-    app: {{ .Values.name }}
+    app: {{ .Release.Name }}
     chart: '{{ .Chart.Name }}-{{ .Chart.Version | replace "+" "_" }}'
     release: {{ .Release.Name }}
     heritage: {{ .Release.Service }}
@@ -16,7 +17,7 @@ metadata:
     tier: {{ .Values.tier }}
     component: JAVA
     function: {{ .Values.function }}
-  name: {{ .Values.name }}
+  name: {{ .Release.Name }}
   namespace: {{ .Release.Namespace | quote }}
 spec:
   rules:
@@ -34,8 +35,8 @@ spec:
           - path: /
         {{- end }}
             backend:
-              serviceName: {{ .Values.name }}
-              servicePort: {{ .Values.service.httpPort }}
+              serviceName: {{ $name }}
+              servicePort: {{ $httpPort }}
   {{- end -}}
   {{- if .Values.ingress.tls }}
   tls:
