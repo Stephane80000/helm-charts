@@ -45,9 +45,9 @@ Alternatively, you can sepcify each parameter using the `--set key=value[,key=va
 
 | Parameter | Description | Default |
 |-----------|-------------|---------|
-| `codeAP` | The application code | `` |
-| `tier` |  | `` |
-| `function` |  | `` |
+| `codeAP` | The application code | `nil` |
+| `tier` |  | `nil` |
+| `function` |  | `nil` |
 | `version` |  | `current` |
 | `replicaCount` | The number of replicas | `1` |
 | `hpa.enabled` |  | `false` |
