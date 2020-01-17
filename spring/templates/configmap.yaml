@@ -14,6 +14,6 @@ metadata:
     component: "JAVA"
     function: "{{ .Values.function }}"
 data:
-  application.yml: |
+  external-config.yml: |
 {{ toYaml .Values.spring.config.content | indent 4  }}
 {{- end }}

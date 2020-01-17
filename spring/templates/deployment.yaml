@@ -56,7 +56,7 @@ spec:
             - name: {{ .Release.Name }}
               mountPath: "/applis/shared"
             {{- end -}}
-            {{- if hasKey .Values.spring.config "contents" }}
+            {{- if hasKey .Values.spring.config "content" }}
             - name: config
               mountPath: /applis/config
             {{- end -}}
@@ -96,7 +96,7 @@ spec:
           persistentVolumeClaim:
             claimName: {{ .Release.Name }}
       {{- end }}
-      {{- if hasKey .Values.spring.config "contents" }}
+      {{- if hasKey .Values.spring.config "content" }}
         - name: config
           configMap:
             name: "config-{{ .Values.version }}"
