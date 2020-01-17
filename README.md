@@ -20,7 +20,7 @@ $ helm repo update
 To install the chart with the release name `myapp` and a YAML file that specifies the values for the parameters `values-xxx.yaml` in the namespace `mynamespace` :
 
 ```bash
-$ helm install myapp stephane80000/spring --version X.X.X -n mynamespace -f values-xxx.yaml
+$ helm install myapp stephane80000/spring --version X.X.X -n mynamespace -f values-xxx.yaml --set image.repository=de.icr.io/myimage,image.tag=0.0.2
 ```
 
 ## Uninstalling the Chart

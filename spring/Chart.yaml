@@ -6,7 +6,7 @@ keywords:
 - spring-cloud
 home: https://spring.io
 icon: https://spring.io/img/homepage/icon-spring-boot.svg
-version: 0.0.3
+version: 0.0.4
 maintainers:
   - name: stephane80000
     email: tobedefined@gmail.com

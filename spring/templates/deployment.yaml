@@ -37,7 +37,9 @@ spec:
 {{ toYaml .Values.securityContext | indent 8 }}
       containers:
         - name: "{{ .Release.Name }}-{{ .Values.version }}"
+          {{- if and (hasKey .Values.image "repository") (hasKey .Values.image "tag") }}
           image: "{{ .Values.image.repository }}:{{ .Values.image.tag }}"
+          {{- end }}
           imagePullPolicy: {{ .Values.image.pullPolicy | quote }}
           env:
             - name: JAVA_OPTS
