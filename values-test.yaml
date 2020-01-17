@@ -7,7 +7,7 @@ codeAP: ""
 tier: ""
 function: ""
 ## Version current or canary
-version: "current"
+version: "stable"
 
 ## Defaut pod replicas
 replicaCount: 1
@@ -156,7 +156,7 @@ istio:
   ## If true, istio config will be created.
   ##
   enabled: false
-  current:
+  stable:
     weight: 100
   canary:
     weight: 0

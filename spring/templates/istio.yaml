@@ -19,7 +19,7 @@ spec:
   precedence: 1
   route:
   - labels:
-      version: "current"
+      version: "stable"
     weight: {{ .Values.istio.current.weight }}
 {{ if .Values.base.enabled }}
   - labels:

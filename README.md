@@ -56,7 +56,7 @@ Alternatively, you can sepcify each parameter using the `--set key=value[,key=va
 | `codeAP` | The application code | `nil` |
 | `tier` |  | `nil` |
 | `function` |  | `nil` |
-| `version` |  | `current` |
+| `version` |  | `stable` |
 | `replicaCount` | The number of replicas | `1` |
 | `hpa.enabled` |  | `false` |
 | `hpa.maxReplicas` |  | `3` |
@@ -96,5 +96,5 @@ Alternatively, you can sepcify each parameter using the `--set key=value[,key=va
 | `podDisruptionBudget.enabled` |  | `false` |
 | `podDisruptionBudget.podDisruptionBudget` |  | `1` |
 | `istio.enabled` |  | `false` |
-| `istio.current.weight` |  | `100` |
+| `istio.stable.weight` |  | `100` |
 | `istio.canary.weight` |  | `0` |
