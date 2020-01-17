@@ -5,14 +5,14 @@ metadata:
   name: "config-{{ .Values.version }}"
   namespace: {{ .Release.Namespace | quote }}
   labels:
-    app: {{ .Release.Name }}
+    app: "{{ .Release.Name }}"
     chart: '{{ .Chart.Name }}-{{ .Chart.Version | replace "+" "_" }}'
-    release: {{ .Release.Name }}
-    heritage: {{ .Release.Service }}
-    codeAP: {{ .Values.codeAP }}
-    tier: {{ .Values.tier }}
-    component: JAVA
-    function: {{ .Values.function }}
+    release: "{{ .Release.Name }}"
+    heritage: "{{ .Release.Service }}"
+    codeAP: "{{ .Values.codeAP }}"
+    tier: "{{ .Values.tier }}"
+    component: "JAVA"
+    function: "{{ .Values.function }}"
 data:
   application.yml: |
 {{ toYaml .Values.spring.config.content | indent 4  }}

@@ -9,14 +9,14 @@ metadata:
     {{ $key }}: {{ $value | quote }}
   {{- end }}
   labels:
-    app: {{ .Release.Name }}
+    app: "{{ .Release.Name }}"
     chart: '{{ .Chart.Name }}-{{ .Chart.Version | replace "+" "_" }}'
-    release: {{ .Release.Name }}
-    heritage: {{ .Release.Service }}
-    codeAP: {{ .Values.codeAP }}
-    tier: {{ .Values.tier }}
-    component: JAVA
-    function: {{ .Values.function }}
+    release: "{{ .Release.Name }}"
+    heritage: "{{ .Release.Service }}"
+    codeAP: "{{ .Values.codeAP }}"
+    tier: "{{ .Values.tier }}"
+    component: "JAVA"
+    function: "{{ .Values.function }}"
   name: {{ .Release.Name }}
   namespace: {{ .Release.Namespace | quote }}
 spec:

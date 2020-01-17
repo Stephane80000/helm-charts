@@ -4,14 +4,14 @@ metadata:
   name: "{{ .Release.Name }}-{{ .Values.version }}"
   namespace: {{ .Release.Namespace | quote }}
   labels:
-    app: {{ .Release.Name }}
+    app: "{{ .Release.Name }}"
     chart: '{{ .Chart.Name }}-{{ .Chart.Version | replace "+" "_" }}'
-    release: {{ .Release.Name }}
-    heritage: {{ .Release.Service }}
-    codeAP: {{ .Values.codeAP }}
-    tier: {{ .Values.tier }}
-    component: JAVA
-    function: {{ .Values.function }}   
+    release: "{{ .Release.Name }}"
+    heritage: "{{ .Release.Service }}"
+    codeAP: "{{ .Values.codeAP }}"
+    tier: "{{ .Values.tier }}"
+    component: "JAVA"
+    function: "{{ .Values.function }}"
 spec:
   replicas: {{ .Values.replicaCount }}
   selector:
@@ -21,15 +21,15 @@ spec:
   template:
     metadata:
       labels:
-        app: {{ .Release.Name }}
+        app: "{{ .Release.Name }}"
         chart: '{{ .Chart.Name }}-{{ .Chart.Version | replace "+" "_" }}'
-        release: {{ .Release.Name }}
-        heritage: {{ .Release.Service }}
-        codeAP: {{ .Values.codeAP }}
-        tier: {{ .Values.tier }}
-        component: JAVA
-        function: {{ .Values.function }}
-        version: {{ .Values.version }}
+        release: "{{ .Release.Name }}"
+        heritage: "{{ .Release.Service }}"
+        codeAP: "{{ .Values.codeAP }}"
+        tier: "{{ .Values.tier }}"
+        component: "JAVA"
+        function: "{{ .Values.function }}"
+        version: "{{ .Values.version }}"
       annotations:
 {{ toYaml .Values.podAnnotations | indent 8 }}
     spec:

@@ -9,6 +9,15 @@ metadata:
     ibm.io/auto-delete-bucket: "false"
     ibm.io/bucket: "{{ .Release.Name }}"
     ibm.io/secret-name: "cos-write-access"
+  labels:
+    app: "{{ .Release.Name }}"
+    chart: '{{ .Chart.Name }}-{{ .Chart.Version | replace "+" "_" }}'
+    release: "{{ .Release.Name }}"
+    heritage: "{{ .Release.Service }}"
+    codeAP: "{{ .Values.codeAP }}"
+    tier: "{{ .Values.tier }}"
+    component: "JAVA"
+    function: "{{ .Values.function }}"
 spec:
   accessModes:
     - ReadWriteMany
