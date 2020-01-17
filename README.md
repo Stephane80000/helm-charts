@@ -23,6 +23,14 @@ To install the chart with the release name `myapp` and a YAML file that specifie
 $ helm install myapp stephane80000/spring --version X.X.X -n mynamespace -f values-xxx.yaml --set image.repository=de.icr.io/myimage,image.tag=0.0.2
 ```
 
+## Upgrade release
+
+To install the chart with the release name `myapp` and a YAML file that specifies the values for the parameters `values-xxx.yaml` in the namespace `mynamespace` :
+
+```bash
+$ helm upgrade myapp stephane80000/spring --version X.X.X -n mynamespace -f values-xxx.yaml --reuse-values
+```
+
 ## Uninstalling the Chart
 
 To uninstall/delete the `myapp` deployment:

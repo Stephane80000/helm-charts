@@ -28,8 +28,8 @@ podAnnotations:
   downscaler/uptime: Mon-Fri 07:30-20:00 CET
 
 image:
-  repository: de.icr.io
-  tag: 0.0.1
+#  repository: de.icr.io
+#  tag: 0.0.1
   pullPolicy: IfNotPresent
 
 ## uncomment and modify the following livenessProbe and readinessProbe.
