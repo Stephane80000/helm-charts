@@ -9,14 +9,17 @@ metadata:
   name: {{ .Release.Name }}
   namespace: {{ .Release.Namespace | quote }}
   labels:
-    app: "{{ .Release.Name }}"
-    chart: '{{ .Chart.Name }}-{{ .Chart.Version | replace "+" "_" }}'
+    app: "{{ .Release.Name | trimAll "-canary" | trimAll "-stable" }}"
+    chart: "{{ .Chart.Name }}-{{ .Chart.Version }}"
     release: "{{ .Release.Name }}"
     heritage: "{{ .Release.Service }}"
-    codeAP: "{{ .Values.codeAP }}"
+    code-app: "{{ .Values.codeapp }}"
     tier: "{{ .Values.tier }}"
     component: "JAVA"
     function: "{{ .Values.function }}"
+    {{- if or (hasSuffix "-stable" .Release.Name) (hasSuffix "-canary" .Release.Name) }}
+    version: "{{ .Release.Name | trunc -6 }}"
+    {{- end }}
 spec:
   scaleTargetRef:
     apiVersion: apps/v1beta1

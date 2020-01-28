@@ -1,0 +1,37 @@
+{{ if and .Values.networkpolicy.enabled (not (hasSuffix "-canary" .Release.Name)) }}
+apiVersion: extensions/v1beta1
+kind: NetworkPolicy
+metadata:
+  name: "{{ .Release.Name | trimAll "-canary" | trimAll "-stable" }}"
+  namespace: {{ .Release.Namespace | quote }}
+  labels:
+    app: "{{ .Release.Name | trimAll "-canary" | trimAll "-stable" }}"
+    chart: "{{ .Chart.Name }}-{{ .Chart.Version }}"
+    release: "{{ .Release.Name }}"
+    heritage: "{{ .Release.Service }}"
+    code-app: "{{ .Values.codeapp }}"
+    tier: "{{ .Values.tier }}"
+    component: "JAVA"
+    function: "{{ .Values.function }}"
+spec:
+{{- if hasKey .Values.networkpolicy "to" }}
+  egress:
+  - to:
+{{ toYaml .Values.networkpolicy.to | indent 4 }}
+{{ end }}
+{{- if hasKey .Values.networkpolicy "from" }}
+  ingress:
+  - from:
+{{ toYaml .Values.networkpolicy.from | indent 4 }}
+{{ end }}
+  podSelector:
+    matchLabels:
+      app: "{{ .Release.Name | trimAll "-canary" | trimAll "-stable" }}"
+  policyTypes:
+{{- if hasKey .Values.networkpolicy "to" }}
+  - Egress
+{{ end }}
+{{- if hasKey .Values.networkpolicy "from" }}
+  - Ingress
+{{ end }}
+{{ end }}

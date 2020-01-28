@@ -1,6 +1,6 @@
 {{- if .Values.ingress.enabled -}}
 {{- $httpPort := .Values.service.httpPort }}
-{{- $name := .Release.Name }}
+{{- $name := .Release.Name | trimAll "-canary" | trimAll "-stable" }}
 apiVersion: extensions/v1beta1
 kind: Ingress
 metadata:
@@ -9,15 +9,15 @@ metadata:
     {{ $key }}: {{ $value | quote }}
   {{- end }}
   labels:
-    app: "{{ .Release.Name }}"
-    chart: '{{ .Chart.Name }}-{{ .Chart.Version | replace "+" "_" }}'
+    app: "{{ .Release.Name | trimAll "-canary" | trimAll "-stable" }}"
+    chart: "{{ .Chart.Name }}-{{ .Chart.Version }}"
     release: "{{ .Release.Name }}"
     heritage: "{{ .Release.Service }}"
-    codeAP: "{{ .Values.codeAP }}"
+    code-app: "{{ .Values.codeapp }}"
     tier: "{{ .Values.tier }}"
     component: "JAVA"
     function: "{{ .Values.function }}"
-  name: {{ .Release.Name }}
+  name: "{{ .Release.Name | trimAll "-canary" | trimAll "-stable" }}"
   namespace: {{ .Release.Namespace | quote }}
 spec:
   rules:

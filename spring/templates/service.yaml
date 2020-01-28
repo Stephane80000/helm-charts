@@ -1,15 +1,15 @@
-{{- if and .Values.service.enabled -}}
+{{- if and (.Values.service.enabled) (not (hasSuffix "-canary" .Release.Name)) -}}
 apiVersion: v1
 kind: Service
 metadata:
-  name: {{ .Release.Name }}
+  name: "{{ .Release.Name | trimAll "-canary" | trimAll "-stable" }}"
   namespace: {{ .Release.Namespace | quote }}
   labels:
-    app: "{{ .Release.Name }}"
-    chart: '{{ .Chart.Name }}-{{ .Chart.Version | replace "+" "_" }}'
+    app: "{{ .Release.Name | trimAll "-canary" | trimAll "-stable" }}"
+    chart: "{{ .Chart.Name }}-{{ .Chart.Version }}"
     release: "{{ .Release.Name }}"
     heritage: "{{ .Release.Service }}"
-    codeAP: "{{ .Values.codeAP }}"
+    code-app: "{{ .Values.codeapp }}"
     tier: "{{ .Values.tier }}"
     component: "JAVA"
     function: "{{ .Values.function }}"
@@ -33,6 +33,5 @@ spec:
     protocol: TCP
     targetPort: https
   selector:
-    app: {{ .Release.Name }}
-    release: {{ .Release.Name | quote }}
+    app: "{{ .Release.Name | trimAll "-canary" | trimAll "-stable" }}"
 {{- end -}}

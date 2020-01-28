@@ -1,35 +1,42 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: "{{ .Release.Name }}-{{ .Values.version }}"
+  name: "{{ .Release.Name }}"
   namespace: {{ .Release.Namespace | quote }}
   labels:
-    app: "{{ .Release.Name }}"
-    chart: '{{ .Chart.Name }}-{{ .Chart.Version | replace "+" "_" }}'
+    app: "{{ .Release.Name | trimAll "-canary" | trimAll "-stable" }}"
+    chart: "{{ .Chart.Name }}-{{ .Chart.Version }}"
     release: "{{ .Release.Name }}"
     heritage: "{{ .Release.Service }}"
-    codeAP: "{{ .Values.codeAP }}"
+    code-app: "{{ .Values.codeapp }}"
     tier: "{{ .Values.tier }}"
     component: "JAVA"
     function: "{{ .Values.function }}"
+    {{- if or (hasSuffix "-stable" .Release.Name) (hasSuffix "-canary" .Release.Name) }}
+    version: "{{ .Release.Name | trunc -6 }}"
+    {{- end }}
 spec:
   replicas: {{ .Values.replicaCount }}
   selector:
     matchLabels:
-      app: {{ .Release.Name }}
-      release: {{ .Release.Name }}
+      app: "{{ .Release.Name | trimAll "-canary" | trimAll "-stable" }}"
+      {{- if or (hasSuffix "-stable" .Release.Name) (hasSuffix "-canary" .Release.Name) }}
+      version: "{{ .Release.Name | trunc -6 }}"
+      {{- end }}
   template:
     metadata:
       labels:
-        app: "{{ .Release.Name }}"
-        chart: '{{ .Chart.Name }}-{{ .Chart.Version | replace "+" "_" }}'
+        app: "{{ .Release.Name | trimAll "-canary" | trimAll "-stable" }}"
+        chart: "{{ .Chart.Name }}-{{ .Chart.Version }}"
         release: "{{ .Release.Name }}"
         heritage: "{{ .Release.Service }}"
-        codeAP: "{{ .Values.codeAP }}"
+        code-app: "{{ .Values.codeapp }}"
         tier: "{{ .Values.tier }}"
         component: "JAVA"
         function: "{{ .Values.function }}"
-        version: "{{ .Values.version }}"
+        {{- if or (hasSuffix "-stable" .Release.Name) (hasSuffix "-canary" .Release.Name) }}
+        version: "{{ .Release.Name | trunc -6 }}"
+        {{- end }}
       annotations:
 {{ toYaml .Values.podAnnotations | indent 8 }}
     spec:
@@ -48,10 +55,10 @@ spec:
             - name: {{ $key }}
               value: {{ $value | quote }}
             {{- end }}
-          {{- if .Values.secretRef.enabled }}
+          {{- if hasKey .Values "secrets" }}
           envFrom:
             - secretRef:
-                name: "{{ .Release.Name }}-secret"
+                name: "{{ .Release.Name }}-{{ .Values.version }}"
           {{- end }}
           volumeMounts:
             {{- if .Values.pvc.enabled }}
@@ -62,7 +69,7 @@ spec:
             - name: config
               mountPath: /applis/config
             {{- end -}}
-            {{ if .Values.spring.config.clientCerts.enabled }}
+            {{ if .Values.clientCerts.enabled }}
             - name: "{{ .Release.Name }}-security"
               mountPath: /applis/security
             {{- end }}
@@ -101,9 +108,9 @@ spec:
       {{- if hasKey .Values.spring.config "content" }}
         - name: config
           configMap:
-            name: "config-{{ .Values.version }}"
+            name: "{{ .Release.Name }}"
       {{- end }}
-      {{- if .Values.spring.config.clientCerts.enabled }}
+      {{- if .Values.clientCerts.enabled }}
         - name: "{{ .Release.Name }}-security"
           secret:
             secretName: "{{ .Release.Name }}-security"

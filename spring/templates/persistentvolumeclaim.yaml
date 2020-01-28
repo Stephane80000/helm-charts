@@ -1,8 +1,8 @@
-{{- if and .Values.pvc.enabled -}}
+{{- if and .Values.pvc.enabled (not (hasSuffix "-canary" .Release.Name)) -}}
 kind: PersistentVolumeClaim
 apiVersion: v1
 metadata:
-  name: {{ .Release.Name }}
+  name: "{{ .Release.Name | trimAll "-canary" | trimAll "-stable" }}"
   namespace: {{ .Release.Namespace | quote }}
   annotations:
     ibm.io/auto-create-bucket: "true"
@@ -10,11 +10,11 @@ metadata:
     ibm.io/bucket: "{{ .Release.Name }}"
     ibm.io/secret-name: "cos-write-access"
   labels:
-    app: "{{ .Release.Name }}"
-    chart: '{{ .Chart.Name }}-{{ .Chart.Version | replace "+" "_" }}'
+    app: "{{ .Release.Name | trimAll "-canary" | trimAll "-stable" }}"
+    chart: "{{ .Chart.Name }}-{{ .Chart.Version }}"
     release: "{{ .Release.Name }}"
     heritage: "{{ .Release.Service }}"
-    codeAP: "{{ .Values.codeAP }}"
+    code-app: "{{ .Values.codeapp }}"
     tier: "{{ .Values.tier }}"
     component: "JAVA"
     function: "{{ .Values.function }}"
