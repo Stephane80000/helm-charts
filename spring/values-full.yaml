@@ -88,7 +88,7 @@ ingress:
 
 ## Horizontal Pod Autoscaler
 hpa:
-  enabled: false
+  enabled: true
   maxReplicas: 3
   metrics:
     cpu:
@@ -110,31 +110,31 @@ image:
 ## These defaults should work with anything that uses the spring health actuator.
 ## If you do want to specify Probe, uncomment the following
 ## lines, adjust them as necessary, and remove the curly braces after '*Probe:'.
-livenessProbe: {}
-#  httpGet:
-#    path: /actuator/health
-#    port: http
-#  initialDelaySeconds: 60
-#  periodSeconds: 10
-readinessProbe: {}
-#  httpGet:
-#    path: /actuator/health
-#    port: http
-#  initialDelaySeconds: 60
-#  periodSeconds: 10
+livenessProbe:
+  httpGet:
+    path: /actuator/health
+    port: http
+  initialDelaySeconds: 60
+  periodSeconds: 10
+readinessProbe:
+  httpGet:
+    path: /actuator/health
+    port: http
+  initialDelaySeconds: 60
+  periodSeconds: 10
 
 ## Uncomment to mount a pvc on /applis/shared
 pvc:
-  enabled: false
+  enabled: true
   storageClassName: ibmc-s3fs-standard-standard-regional
 
 ## The list of ports that your app listens on
 containerPort: 8080
 
-extraEnv: {}
+extraEnv:
   ## Extra environment variables to be injected. If you do want to specify extraEnv, uncomment the following
   ## lines, adjust them as necessary, and remove the curly braces after 'extraEnv:'.
-  # DATABASE_ENGINE: mysql
+  DATABASE_ENGINE: mysql
   # DATABASE_HOST: mysql
   # DATABASE_NAME: spring
   # DATABASE_USERNAME: spring
@@ -153,13 +153,13 @@ affinity: {}
 podDisruptionBudget:
   ## If true, podDisruptionBudget will be created.
   ##
-  enabled: false
+  enabled: true
   minAvailable: 1
 
 istio:
   ## If true, istio config will be created.
   ##
-  enabled: false
+  enabled: true
   stable:
     weight: 100
   canary:

@@ -1,0 +1,8 @@
+Thank you for installing {{ .Chart.Name }}.
+
+Your release is named {{ .Release.Name }}.
+
+To learn more about the release, try:
+  $ helm status {{ .Release.Name }}
+
+Visit https://github.com/Stephane80000/helm-charts

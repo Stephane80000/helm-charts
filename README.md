@@ -36,7 +36,7 @@ $ helm upgrade myapp stephane80000/spring --version X.X.X -n mynamespace -f valu
 To uninstall/delete the `myapp` deployment:
 
 ```console
-helm delete --purge myapp
+helm uninstall myapp
 ```
 
 The command removes nearly all the Kubernetes components associated with the

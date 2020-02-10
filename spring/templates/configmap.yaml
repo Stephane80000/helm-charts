@@ -5,7 +5,7 @@ metadata:
   name: "{{ .Release.Name }}"
   namespace: {{ .Release.Namespace | quote }}
   labels:
-    app: "{{ .Release.Name | trimAll "-canary" | trimAll "-stable" }}"
+    app: "{{ .Release.Name | trimSuffix "-canary" | trimSuffix "-stable" }}"
     chart: "{{ .Chart.Name }}-{{ .Chart.Version }}"
     release: "{{ .Release.Name }}"
     heritage: "{{ .Release.Service }}"

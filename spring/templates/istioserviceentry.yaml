@@ -1,0 +1,18 @@
+{{ if and .Values.istio.enabled (not (hasSuffix "-canary" .Release.Name)) }}
+{{- range .Values.istio.serviceentry }}
+apiVersion: networking.istio.io/v1alpha3
+kind: ServiceEntry
+metadata:
+  name: "edocs-ext-{{ .name }}"
+spec:
+  hosts:
+  - {{ .host }}
+  ports:
+  - number: {{ .port }}
+    name: {{ .name }}
+    protocol: {{ .protocol }}
+  resolution: DNS
+  location: MESH_EXTERNAL
+---
+{{- end }}
+{{ end }}

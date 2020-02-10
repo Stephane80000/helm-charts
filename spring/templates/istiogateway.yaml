@@ -1,0 +1,30 @@
+{{ if and .Values.istio.enabled (not (hasSuffix "-canary" .Release.Name)) }}
+apiVersion: networking.istio.io/v1alpha3
+kind: Gateway
+metadata:
+  name: "{{ .Release.Name | trimSuffix "-canary" | trimSuffix "-stable" }}"
+  namespace: {{ .Release.Namespace | quote }}
+  labels:
+    app: "{{ .Release.Name | trimSuffix "-canary" | trimSuffix "-stable" }}"
+    chart: "{{ .Chart.Name }}-{{ .Chart.Version }}"
+    release: "{{ .Release.Name }}"
+    heritage: "{{ .Release.Service }}"
+    code-app: "{{ .Values.codeapp }}"
+    tier: "{{ .Values.tier }}"
+    component: "JAVA"
+    function: "{{ .Values.function }}"
+spec:
+  selector:
+    istio: ingressgateway # use istio default controller
+  servers:
+  - port:
+      number: 443
+      name: https
+      protocol: HTTPS
+    hosts:
+    - {{ .Values.istio.gateway.host }}
+    tls:
+      mode: SIMPLE
+      privateKey: /etc/istio/ingressgateway-certs/tls.key
+      serverCertificate: /etc/istio/ingressgateway-certs/tls.crt
+{{ end }}

@@ -1,14 +1,9 @@
-{{- if and .Values.pvc.enabled (not (hasSuffix "-canary" .Release.Name)) -}}
-kind: PersistentVolumeClaim
-apiVersion: v1
+{{ if and .Values.istio.enabled (not (hasSuffix "-canary" .Release.Name)) }}
+apiVersion: authentication.istio.io/v1alpha1
+kind: Policy
 metadata:
   name: "{{ .Release.Name | trimSuffix "-canary" | trimSuffix "-stable" }}"
   namespace: {{ .Release.Namespace | quote }}
-  annotations:
-    ibm.io/auto-create-bucket: "true"
-    ibm.io/auto-delete-bucket: "true"
-    ibm.io/bucket: ""
-    ibm.io/secret-name: "cos-write-access"
   labels:
     app: "{{ .Release.Name | trimSuffix "-canary" | trimSuffix "-stable" }}"
     chart: "{{ .Chart.Name }}-{{ .Chart.Version }}"
@@ -19,10 +14,8 @@ metadata:
     component: "JAVA"
     function: "{{ .Values.function }}"
 spec:
-  accessModes:
-    - ReadWriteMany
-  resources:
-    requests:
-      storage: 8Gi # Enter a fictitious value
-  storageClassName: {{ .Values.pvc.storageClassName }}
-{{- end }}
+  peers:
+  - mtls: {}
+  targets:
+  - name: "{{ .Release.Name | trimSuffix "-canary" | trimSuffix "-stable" }}"
+{{ end }}

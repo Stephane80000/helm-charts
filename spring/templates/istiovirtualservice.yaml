@@ -1,0 +1,31 @@
+{{ if and .Values.istio.enabled (not (hasSuffix "-canary" .Release.Name)) }}
+apiVersion: networking.istio.io/v1alpha3
+kind: VirtualService
+metadata:
+  name: "{{ .Release.Name | trimSuffix "-canary" | trimSuffix "-stable" }}"
+  namespace: {{ .Release.Namespace | quote }}
+  labels:
+    app: "{{ .Release.Name | trimSuffix "-canary" | trimSuffix "-stable" }}"
+    chart: "{{ .Chart.Name }}-{{ .Chart.Version }}"
+    release: "{{ .Release.Name }}"
+    heritage: "{{ .Release.Service }}"
+    code-app: "{{ .Values.codeapp }}"
+    tier: "{{ .Values.tier }}"
+    component: "JAVA"
+    function: "{{ .Values.function }}"
+spec:
+  hosts:
+  - "{{ .Values.istio.gateway.host }}"
+  gateways:
+  - {{ .Release.Name | trimSuffix "-canary" | trimSuffix "-stable" }}
+  http:
+  - route:
+    - destination:
+        host: "{{ .Release.Name | trimSuffix "-canary" | trimSuffix "-stable" }}"
+        subset: stable
+      weight: {{ .Values.istio.stable.weight }}
+    - destination:
+        host: "{{ .Release.Name | trimSuffix "-canary" | trimSuffix "-stable" }}"
+        subset: canary
+      weight: {{ .Values.istio.canary.weight }}
+{{ end }}

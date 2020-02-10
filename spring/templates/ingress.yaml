@@ -1,6 +1,6 @@
-{{- if .Values.ingress.enabled -}}
+{{- if and .Values.ingress.enabled (not (hasSuffix "-canary" .Release.Name)) -}}
 {{- $httpPort := .Values.service.httpPort }}
-{{- $name := .Release.Name | trimAll "-canary" | trimAll "-stable" }}
+{{- $name := .Release.Name | trimSuffix "-canary" | trimSuffix "-stable" }}
 apiVersion: extensions/v1beta1
 kind: Ingress
 metadata:
@@ -9,7 +9,7 @@ metadata:
     {{ $key }}: {{ $value | quote }}
   {{- end }}
   labels:
-    app: "{{ .Release.Name | trimAll "-canary" | trimAll "-stable" }}"
+    app: "{{ .Release.Name | trimSuffix "-canary" | trimSuffix "-stable" }}"
     chart: "{{ .Chart.Name }}-{{ .Chart.Version }}"
     release: "{{ .Release.Name }}"
     heritage: "{{ .Release.Service }}"
@@ -17,12 +17,12 @@ metadata:
     tier: "{{ .Values.tier }}"
     component: "JAVA"
     function: "{{ .Values.function }}"
-  name: "{{ .Release.Name | trimAll "-canary" | trimAll "-stable" }}"
+  name: "{{ .Release.Name | trimSuffix "-canary" | trimSuffix "-stable" }}"
   namespace: {{ .Release.Namespace | quote }}
 spec:
   rules:
-  {{- range .Values.ingress.hosts }}
-    - host: {{ . }}
+  {{- if .Values.ingress.host }}
+    - host: {{ .Values.ingress.host }}
       http:
         paths:
         {{- if index $.Values.ingress "annotations" }}
@@ -40,6 +40,8 @@ spec:
   {{- end -}}
   {{- if .Values.ingress.tls }}
   tls:
-{{ toYaml .Values.ingress.tls | indent 4 }}
+    - secretName: {{ .Values.ingress.tls.secretName }}
+      hosts:
+        - {{ .Values.ingress.host }}
   {{- end -}}
 {{- end -}}

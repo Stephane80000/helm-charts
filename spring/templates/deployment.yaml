@@ -4,7 +4,7 @@ metadata:
   name: "{{ .Release.Name }}"
   namespace: {{ .Release.Namespace | quote }}
   labels:
-    app: "{{ .Release.Name | trimAll "-canary" | trimAll "-stable" }}"
+    app: "{{ .Release.Name | trimSuffix "-canary" | trimSuffix "-stable" }}"
     chart: "{{ .Chart.Name }}-{{ .Chart.Version }}"
     release: "{{ .Release.Name }}"
     heritage: "{{ .Release.Service }}"
@@ -15,18 +15,20 @@ metadata:
     {{- if or (hasSuffix "-stable" .Release.Name) (hasSuffix "-canary" .Release.Name) }}
     version: "{{ .Release.Name | trunc -6 }}"
     {{- end }}
+  annotations:
+    rollme: {{ randAlphaNum 5 | quote }}
 spec:
   replicas: {{ .Values.replicaCount }}
   selector:
     matchLabels:
-      app: "{{ .Release.Name | trimAll "-canary" | trimAll "-stable" }}"
+      app: "{{ .Release.Name | trimSuffix "-canary" | trimSuffix "-stable" }}"
       {{- if or (hasSuffix "-stable" .Release.Name) (hasSuffix "-canary" .Release.Name) }}
       version: "{{ .Release.Name | trunc -6 }}"
       {{- end }}
   template:
     metadata:
       labels:
-        app: "{{ .Release.Name | trimAll "-canary" | trimAll "-stable" }}"
+        app: "{{ .Release.Name | trimSuffix "-canary" | trimSuffix "-stable" }}"
         chart: "{{ .Chart.Name }}-{{ .Chart.Version }}"
         release: "{{ .Release.Name }}"
         heritage: "{{ .Release.Service }}"
@@ -38,12 +40,16 @@ spec:
         version: "{{ .Release.Name | trunc -6 }}"
         {{- end }}
       annotations:
+        rollme: {{ randAlphaNum 5 | quote }}
+        {{ if and .Values.istio.enabled }}
+        sidecar.istio.io/rewriteAppHTTPProbers: "true"
+        {{- end }}
 {{ toYaml .Values.podAnnotations | indent 8 }}
     spec:
       securityContext:
 {{ toYaml .Values.securityContext | indent 8 }}
       containers:
-        - name: "{{ .Release.Name }}-{{ .Values.version }}"
+        - name: "{{ .Release.Name }}"
           {{- if and (hasKey .Values.image "repository") (hasKey .Values.image "tag") }}
           image: "{{ .Values.image.repository }}:{{ .Values.image.tag }}"
           {{- end }}
@@ -58,7 +64,7 @@ spec:
           {{- if hasKey .Values "secrets" }}
           envFrom:
             - secretRef:
-                name: "{{ .Release.Name }}-{{ .Values.version }}"
+                name: "{{ .Release.Name }}"
           {{- end }}
           volumeMounts:
             {{- if .Values.pvc.enabled }}
@@ -103,7 +109,7 @@ spec:
       {{- if .Values.pvc.enabled }}
         - name: {{ .Release.Name }}
           persistentVolumeClaim:
-            claimName: {{ .Release.Name }}
+            claimName: "{{ .Release.Name | trimSuffix "-canary" | trimSuffix "-stable" }}"
       {{- end }}
       {{- if hasKey .Values.spring.config "content" }}
         - name: config

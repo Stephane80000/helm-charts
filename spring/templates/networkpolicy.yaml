@@ -2,10 +2,10 @@
 apiVersion: extensions/v1beta1
 kind: NetworkPolicy
 metadata:
-  name: "{{ .Release.Name | trimAll "-canary" | trimAll "-stable" }}"
+  name: "{{ .Release.Name | trimSuffix "-canary" | trimSuffix "-stable" }}"
   namespace: {{ .Release.Namespace | quote }}
   labels:
-    app: "{{ .Release.Name | trimAll "-canary" | trimAll "-stable" }}"
+    app: "{{ .Release.Name | trimSuffix "-canary" | trimSuffix "-stable" }}"
     chart: "{{ .Chart.Name }}-{{ .Chart.Version }}"
     release: "{{ .Release.Name }}"
     heritage: "{{ .Release.Service }}"
@@ -26,7 +26,7 @@ spec:
 {{ end }}
   podSelector:
     matchLabels:
-      app: "{{ .Release.Name | trimAll "-canary" | trimAll "-stable" }}"
+      app: "{{ .Release.Name | trimSuffix "-canary" | trimSuffix "-stable" }}"
   policyTypes:
 {{- if hasKey .Values.networkpolicy "to" }}
   - Egress
