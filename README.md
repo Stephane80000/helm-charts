@@ -5,6 +5,7 @@
 ## Chart Details
 
 This chart is designed to be a general purpose chart for running Spring based applications.
+
 **Release name must be suffix by `-stable` or `-canary`**
 
 ## Add repo
