@@ -2,9 +2,9 @@ apiVersion: v1
 entries:
   spring:
   - apiVersion: v1
-    created: "2020-02-11T10:31:38.753802+01:00"
+    created: "2020-02-11T14:18:49.995715+01:00"
     description: Helm chart for deploying basic Spring applications
-    digest: 74036ba885d47aa53fe3dd7861ee3c5767346bbbf491014cf9da52967e9fa388
+    digest: b7ae41ca8e43d1fd3a740ae23bf94cfccc44907038098494ca1116c3497a7e50
     home: https://spring.io
     icon: https://spring.io/img/homepage/icon-spring-boot.svg
     keywords:
@@ -18,7 +18,7 @@ entries:
     - https://stephane80000.github.io/helm-charts/spring/spring-0.0.6.tgz
     version: 0.0.6
   - apiVersion: v1
-    created: "2020-02-11T10:31:38.748914+01:00"
+    created: "2020-02-11T14:18:49.989685+01:00"
     description: Helm chart for deploying basic Spring applications
     digest: 0a91ab3c572137e4221ec66ecf9e12f2e410a1090225eb017fa20dfb84d16e72
     home: https://spring.io
@@ -34,7 +34,7 @@ entries:
     - https://stephane80000.github.io/helm-charts/spring/spring-0.0.5.tgz
     version: 0.0.5
   - apiVersion: v1
-    created: "2020-02-11T10:31:38.747074+01:00"
+    created: "2020-02-11T14:18:49.98767+01:00"
     description: Helm chart for deploying basic Spring applications
     digest: 1a1e74d24a4f5516b39d6188de4a013a0c08b14761e078d253fc140739fb20c3
     home: https://spring.io
@@ -50,7 +50,7 @@ entries:
     - https://stephane80000.github.io/helm-charts/spring/spring-0.0.4.tgz
     version: 0.0.4
   - apiVersion: v1
-    created: "2020-02-11T10:31:38.745346+01:00"
+    created: "2020-02-11T14:18:49.986293+01:00"
     description: Helm chart for deploying basic Spring applications
     digest: 1220cf1490547faa7572a057f9ade178764e02ac16e1d8b767888df452a21e46
     home: https://spring.io
@@ -66,7 +66,7 @@ entries:
     - https://stephane80000.github.io/helm-charts/spring/spring-0.0.3.tgz
     version: 0.0.3
   - apiVersion: v1
-    created: "2020-02-11T10:31:38.744337+01:00"
+    created: "2020-02-11T14:18:49.985218+01:00"
     description: Helm chart for deploying basic Spring applications
     digest: ab6c90a70c302e82e73a46016231dffa3b476be36afdbf808d8677ed2f06b398
     home: https://spring.io
@@ -82,7 +82,7 @@ entries:
     - https://stephane80000.github.io/helm-charts/spring/spring-0.0.2.tgz
     version: 0.0.2
   - apiVersion: v1
-    created: "2020-02-11T10:31:38.743509+01:00"
+    created: "2020-02-11T14:18:49.983687+01:00"
     description: Helm chart for deploying basic Spring applications
     digest: a053459411492822c2a21f9e14045503e55535211f2473efc481c5c168dbd5c6
     home: https://spring.io
@@ -97,4 +97,4 @@ entries:
     urls:
     - https://stephane80000.github.io/helm-charts/spring/spring-0.0.1.tgz
     version: 0.0.1
-generated: "2020-02-11T10:31:38.742485+01:00"
+generated: "2020-02-11T14:18:49.982634+01:00"
