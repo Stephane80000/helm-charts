@@ -9,9 +9,9 @@
 ## Replace all {{name}} by the value of name
 codeapp: "00000"
 tier: "PA"
-function: "check"
+function: ""
 ## Version current or canary
-version: "current"
+version: "stable"
 ## Specify java command line options
 javaopts: "-Dspring.profiles.active=cloud-dev -Dspring.config.additional-location=/applis/config/external-config.yml"
 
@@ -21,7 +21,7 @@ resources:
   ## resources, such as Minikube. If you do want to specify resources, uncomment the following
   ## lines, adjust them as necessary, and remove the curly braces after 'resources:'.
   limits:
-    cpu: 200m
+    cpu: 1000m
     memory: 512Mi
   requests:
     cpu: 100m
@@ -64,8 +64,8 @@ service:
 
 ingress:
   ## If true, Ingress will be created.
-  ##
-  enabled: true
+  ## !!! Ingress will not working is istio enabled !!!
+  enabled: false
 
   ## Ingress annotations
   ##
@@ -88,8 +88,8 @@ ingress:
 
 ## Horizontal Pod Autoscaler
 hpa:
-  enabled: false
-  maxReplicas: 3
+  enabled: true
+  maxReplicas: 2
   metrics:
     cpu:
       targetAverageUtilization: 70
@@ -110,18 +110,18 @@ image:
 ## These defaults should work with anything that uses the spring health actuator.
 ## If you do want to specify Probe, uncomment the following
 ## lines, adjust them as necessary, and remove the curly braces after '*Probe:'.
-livenessProbe: {}
-#  httpGet:
-#    path: /actuator/health
-#    port: http
-#  initialDelaySeconds: 60
-#  periodSeconds: 10
-readinessProbe: {}
-#  httpGet:
-#    path: /actuator/health
-#    port: http
-#  initialDelaySeconds: 60
-#  periodSeconds: 10
+livenessProbe:
+  httpGet:
+    path: /actuator/health
+    port: http
+  initialDelaySeconds: 60
+  periodSeconds: 10
+readinessProbe:
+  httpGet:
+    path: /actuator/health
+    port: http
+  initialDelaySeconds: 60
+  periodSeconds: 10
 
 ## Uncomment to mount a pvc on /applis/shared
 pvc:
@@ -153,17 +153,24 @@ affinity: {}
 podDisruptionBudget:
   ## If true, podDisruptionBudget will be created.
   ##
-  enabled: false
+  enabled: true
   minAvailable: 1
 
 istio:
-  ## If true, istio config will be created.
+  ## If true, istio config will be created and ingress will be disabled
   ##
   enabled: false
   stable:
     weight: 100
   canary:
     weight: 0
+  gateway:
+    host: "<myapp>.<istio_nlb_host>" ## ibmcloud ks nlb-dns ls --cluster <mycluster> | grep "`k get svc istio-ingressgateway -n istio-system | awk '{print $4}'`" | awk '{ print $1 }'
+  serviceentry:
+    - name: <myexternalservice>
+      host: <host>
+      port: <port>
+      protocol: <http|https|TCP> 
 
 networkpolicy:
   enabled: false
