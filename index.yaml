@@ -2,9 +2,9 @@ apiVersion: v1
 entries:
   spring:
   - apiVersion: v1
-    created: "2020-02-11T14:22:31.552734+01:00"
+    created: "2020-02-11T17:37:03.729897+01:00"
     description: Helm chart for deploying basic Spring applications
-    digest: efad5c4157675094a2beeebc82b4b3936b633a1c63ee8369e350fe9af856c9bb
+    digest: d426adf6218a81f917e9336ca2c7d5c03dafa653fe8e79dae4523ea609eadadb
     home: https://spring.io
     icon: https://spring.io/img/homepage/icon-spring-boot.svg
     keywords:
@@ -15,10 +15,10 @@ entries:
       name: stephane80000
     name: spring
     urls:
-    - https://stephane80000.github.io/helm-charts/spring/spring-0.0.6.tgz
+    - https://stephane80000.github.io/helm-charts/spring-0.0.6.tgz
     version: 0.0.6
   - apiVersion: v1
-    created: "2020-02-11T14:22:31.54589+01:00"
+    created: "2020-02-11T17:37:03.728862+01:00"
     description: Helm chart for deploying basic Spring applications
     digest: 0a91ab3c572137e4221ec66ecf9e12f2e410a1090225eb017fa20dfb84d16e72
     home: https://spring.io
@@ -31,10 +31,10 @@ entries:
       name: stephane80000
     name: spring
     urls:
-    - https://stephane80000.github.io/helm-charts/spring/spring-0.0.5.tgz
+    - https://stephane80000.github.io/helm-charts/spring-0.0.5.tgz
     version: 0.0.5
   - apiVersion: v1
-    created: "2020-02-11T14:22:31.544009+01:00"
+    created: "2020-02-11T17:37:03.726998+01:00"
     description: Helm chart for deploying basic Spring applications
     digest: 1a1e74d24a4f5516b39d6188de4a013a0c08b14761e078d253fc140739fb20c3
     home: https://spring.io
@@ -47,10 +47,10 @@ entries:
       name: stephane80000
     name: spring
     urls:
-    - https://stephane80000.github.io/helm-charts/spring/spring-0.0.4.tgz
+    - https://stephane80000.github.io/helm-charts/spring-0.0.4.tgz
     version: 0.0.4
   - apiVersion: v1
-    created: "2020-02-11T14:22:31.542717+01:00"
+    created: "2020-02-11T17:37:03.725673+01:00"
     description: Helm chart for deploying basic Spring applications
     digest: 1220cf1490547faa7572a057f9ade178764e02ac16e1d8b767888df452a21e46
     home: https://spring.io
@@ -63,10 +63,10 @@ entries:
       name: stephane80000
     name: spring
     urls:
-    - https://stephane80000.github.io/helm-charts/spring/spring-0.0.3.tgz
+    - https://stephane80000.github.io/helm-charts/spring-0.0.3.tgz
     version: 0.0.3
   - apiVersion: v1
-    created: "2020-02-11T14:22:31.541783+01:00"
+    created: "2020-02-11T17:37:03.724731+01:00"
     description: Helm chart for deploying basic Spring applications
     digest: ab6c90a70c302e82e73a46016231dffa3b476be36afdbf808d8677ed2f06b398
     home: https://spring.io
@@ -79,10 +79,10 @@ entries:
       name: stephane80000
     name: spring
     urls:
-    - https://stephane80000.github.io/helm-charts/spring/spring-0.0.2.tgz
+    - https://stephane80000.github.io/helm-charts/spring-0.0.2.tgz
     version: 0.0.2
   - apiVersion: v1
-    created: "2020-02-11T14:22:31.540943+01:00"
+    created: "2020-02-11T17:37:03.72393+01:00"
     description: Helm chart for deploying basic Spring applications
     digest: a053459411492822c2a21f9e14045503e55535211f2473efc481c5c168dbd5c6
     home: https://spring.io
@@ -95,6 +95,6 @@ entries:
       name: stephane80000
     name: spring
     urls:
-    - https://stephane80000.github.io/helm-charts/spring/spring-0.0.1.tgz
+    - https://stephane80000.github.io/helm-charts/spring-0.0.1.tgz
     version: 0.0.1
-generated: "2020-02-11T14:22:31.53914+01:00"
+generated: "2020-02-11T17:37:03.721979+01:00"

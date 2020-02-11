@@ -41,7 +41,7 @@ spec:
         {{- end }}
       annotations:
         rollme: {{ randAlphaNum 5 | quote }}
-        {{ if and .Values.istio.enabled }}
+        {{- if and .Values.istio.enabled }}
         sidecar.istio.io/rewriteAppHTTPProbers: "true"
         {{- end }}
 {{ toYaml .Values.podAnnotations | indent 8 }}
