@@ -111,4 +111,4 @@ Alternatively, you can sepcify each parameter using the `--set key=value[,key=va
 | `istio.serviceentry.name` | Isitio external serviceentry | `nil` |
 | `istio.serviceentry.host` | Isitio external serviceentry | `nil` |
 | `istio.serviceentry.port` | Isitio external serviceentry | `nil` |
-| `istio.serviceentry.protocol` | Isitio external serviceentry <http|https|TCP> | `nil` |
+| `istio.serviceentry.protocol` | Isitio external serviceentry http or https or TCP | `nil` |
